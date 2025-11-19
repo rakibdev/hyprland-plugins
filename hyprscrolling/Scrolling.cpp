@@ -549,13 +549,20 @@ void CScrollingLayout::onWindowCreatedTiling(PHLWINDOW window, eDirection direct
         workspaceData->fitCol(col);
     } else {
         if (window->m_draggingTiled) {
-            if (droppingOn) {
-                const auto IDX = droppingColumn->idx(droppingOn);
-                const auto TOP = droppingOn->getWindowIdealBoundingBoxIgnoreReserved().middle().y > g_pInputManager->getMouseCoordsInternal().y;
-                droppingColumn->add(window, TOP ? (IDX == 0 ? -1 : IDX - 1) : (IDX));
-            } else
-                droppingColumn->add(window);
-            workspaceData->fitCol(droppingColumn);
+            const auto MOUSE_X = g_pInputManager->getMouseCoordsInternal().x;
+            const auto DROP_X  = droppingOn->getWindowIdealBoundingBoxIgnoreReserved().middle().x;
+            const auto IS_LEFT = MOUSE_X < DROP_X;
+            const auto COL_IDX = workspaceData->idx(droppingColumn);
+
+            if (IS_LEFT) {
+                const auto NEW_COL = COL_IDX == -1 ? workspaceData->add() : workspaceData->add(COL_IDX - 1);
+                NEW_COL->add(window);
+                workspaceData->fitCol(NEW_COL);
+            } else {
+                const auto NEW_COL = COL_IDX == -1 ? workspaceData->add() : workspaceData->add(COL_IDX);
+                NEW_COL->add(window);
+                workspaceData->fitCol(NEW_COL);
+            }
         } else {
             auto idx = workspaceData->idx(droppingColumn);
             auto col = idx == -1 ? workspaceData->add() : workspaceData->add(idx);
