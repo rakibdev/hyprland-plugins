@@ -848,7 +848,9 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
             const auto COL = DATA->next(WDATA->column.lock());
             if (!COL) {
                 // move to max
-                DATA->leftOffset = DATA->maxWidth();
+                const auto USABLE = usableAreaFor(DATA->workspace->m_monitor.lock());
+                DATA->leftOffset = std::max(0.0, DATA->maxWidth() - USABLE.w);
+                DATA->centerOrFitCol(WDATA->column.lock());
                 DATA->recalculate();
                 focusWindowUpdate(nullptr);
                 return {};
