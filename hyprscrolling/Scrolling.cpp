@@ -304,8 +304,6 @@ void SWorkspaceData::recalculate(bool forceInstant) {
         }
 
         currentLeft += ITEM_WIDTH;
-        if (currentLeft == USABLE.width)
-            currentLeft++; // avoid ffm from "grabbing" the window on the right
     }
 }
 
