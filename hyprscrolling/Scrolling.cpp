@@ -865,7 +865,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
             DATA->recalculate();
 
             focusWindowUpdate(COL->windowDatas.front()->window.lock());
-            g_pCompositor->warpCursorTo(COL->windowDatas.front()->window.lock()->middle());
 
             return {};
         } else if (ARGS[1] == "-col") {
@@ -875,7 +874,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
                     DATA->centerCol(DATA->columns.back());
                     DATA->recalculate();
                     focusWindowUpdate((DATA->columns.back()->windowDatas.back())->window.lock());
-                    g_pCompositor->warpCursorTo((DATA->columns.back()->windowDatas.back())->window.lock()->middle());
                 }
 
                 return {};
@@ -889,7 +887,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
             DATA->recalculate();
 
             focusWindowUpdate(COL->windowDatas.back()->window.lock());
-            g_pCompositor->warpCursorTo(COL->windowDatas.front()->window.lock()->middle());
 
             return {};
         }
@@ -1136,7 +1133,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
                 }
 
                 focusWindowUpdate(PREV->window.lock());
-                g_pCompositor->warpCursorTo(PREV->window.lock()->middle());
                 break;
             }
 
@@ -1151,7 +1147,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
                 }
 
                 focusWindowUpdate(NEXT->window.lock());
-                g_pCompositor->warpCursorTo(NEXT->window.lock()->middle());
                 break;
             }
 
@@ -1161,7 +1156,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
                     if (*PNOFALLBACK) {
                         centerOrFit(WDATA->column->workspace.lock(), WDATA->column.lock());
                         WDATA->column->workspace->recalculate();
-                        g_pCompositor->warpCursorTo(WDATA->window.lock()->middle());
                         break;
                     } else
                         PREV = WDATA->column->workspace->columns.back();
@@ -1172,7 +1166,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
                     focusWindowUpdate(pTargetWindowData->window.lock());
                     centerOrFit(WDATA->column->workspace.lock(), PREV);
                     WDATA->column->workspace->recalculate();
-                    g_pCompositor->warpCursorTo(pTargetWindowData->window.lock()->middle());
                 }
                 break;
             }
@@ -1183,7 +1176,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
                     if (*PNOFALLBACK) {
                         centerOrFit(WDATA->column->workspace.lock(), WDATA->column.lock());
                         WDATA->column->workspace->recalculate();
-                        g_pCompositor->warpCursorTo(WDATA->window.lock()->middle());
                         break;
                     } else
                         NEXT = WDATA->column->workspace->columns.front();
@@ -1194,7 +1186,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
                     focusWindowUpdate(pTargetWindowData->window.lock());
                     centerOrFit(WDATA->column->workspace.lock(), NEXT);
                     WDATA->column->workspace->recalculate();
-                    g_pCompositor->warpCursorTo(pTargetWindowData->window.lock()->middle());
                 }
                 break;
             }
@@ -1350,7 +1341,6 @@ std::any CScrollingLayout::layoutMessage(SLayoutMessageHeader header, std::strin
         }
 
         g_pCompositor->focusWindow(windowsToMove.front());
-        g_pCompositor->warpCursorTo(windowsToMove.front()->middle());
     } else if (ARGS[0] == "togglefit") {
         static const auto PFITMETHOD = CConfigValue<Hyprlang::INT>("plugin:hyprscrolling:focus_fit_method");
         auto&             fitMethod  = *PFITMETHOD.ptr();
@@ -1485,7 +1475,6 @@ void CScrollingLayout::moveWindowTo(PHLWINDOW w, const std::string& dir, bool si
 
     WS->recalculate();
     focusWindowUpdate(w);
-    g_pCompositor->warpCursorTo(w->middle());
 }
 
 void CScrollingLayout::alterSplitRatio(PHLWINDOW, float, bool) {
